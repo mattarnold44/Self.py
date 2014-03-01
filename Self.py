@@ -10,6 +10,23 @@ class Self (object):
         self.zen = Trait('no-mind')  # create private zen object
         self.Kierk = Trait('Soren Kierkegaard (Knight of Faith)') # create private Kierkegaard object
         self.hemi = None
+        self.despair = False
+        self.immortal = False
+
+    def checkImmortality(self):
+        if self.immortal == True:
+            return True
+        else:
+            return False
+    
+    def startDespairing(self):
+        self.despair = True
+
+    def getDespair(self):
+        if self.despair == True:
+            return True
+        else:
+            return False
 
     def isEast(self):
         self.hemi = 'east'
@@ -59,6 +76,10 @@ class Self (object):
         self.was.append(self.am)
         self.am = self.Kierk
         self.want2be = None
+        # implies immortality
+        self.immortal = True
+        # implies despair
+        self.despair = True
         print '\n\n\t you became S0ren Kierkegaard\n'
          
     def getWas(self):
@@ -97,6 +118,7 @@ def printOptions():
     print '\nOPTIONS:'
     print '\t1. i am...'
     print '\t2. become [x]'
+    print '\t3. check despair status'
     print '\t[q] to quit'
 
 def getInput(prompt):
@@ -172,9 +194,18 @@ if __name__ == "__main__":
                             break    
                         else:
                             print '\ninvalid choice\n'
+                
+                elif choice == '3':
+                    if i.getDespair() == True:
+                        print '\nyou are in despair'
+                    else:
+                        print '\nyou are not in despair'
 
                 elif choice == 'q':
-                    quit = True
+                    if i.checkImmortality() == True:
+                        print '\nyou\'ve already acknowledged immortality; you can\'t quit now'
+                    else:
+                        quit = True
                 else:
                     print '\ninvalid choice'
         
