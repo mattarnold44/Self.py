@@ -13,7 +13,27 @@ class Self (object):
         self.despair = False
         self.immortal = False
         self.tab = 0
+        self.portfolio = []
     
+    def appendPortfolio(self, art):
+        self.portfolio.append(art)
+
+    def getPortfolio(self):  # unused
+        pRet = []
+        for art in self.portfolio:
+            pRet.append(art)
+        return pRet
+
+    def printPortfolio(self):
+        if self.portfolio != []:
+            print '\t'*self.tab + '\npress Enter for each pic'
+            for art in self.portfolio:
+                raw_input()
+                print art
+        else:
+            print
+            print '\t'*self.tab + 'portfolio is empty'
+
     def incTab(self):
         self.tab += 1
     
@@ -120,7 +140,7 @@ class Trait (object):
     def setAdj(self, newAdj):
         self.adj = newAdj
 
-# ===========================================================
+# ===============================================
 # other functions:
 
 def printTabbedOptions(tabs, optionsList):
@@ -149,6 +169,10 @@ def updateTab(t):
     t = '\t'*i.getTab()
     return t
 
+def buildDraw():
+    r = raw_input()
+    return r
+
 ###################################################
 #             MAIN                                #
 ###################################################
@@ -175,8 +199,9 @@ if __name__ == "__main__":
             while quit != True:
                 # the print options loop
                 print '\n' + tabs+ 'OPTIONS:'
-                printTabbedOptions(tabs, ['1. i am...', '2. become [x]', '3. check despair status', '4. shift right', '5. shift left', '[q] to quit'])
-                choice = getInput(tabs,'choose\n', tabs)
+                printTabbedOptions(tabs, ['1. i am...', '2. become [x]', '3. check despair status', '4. shift right', '5. shift left',\
+                 '6. build-draw', '7. print portfolio', '[q] to quit'])
+                choice = getInput(tabs,'choose\n', tabs).strip('.')
         
                 if choice == '1':
                     # i am...
@@ -208,17 +233,17 @@ if __name__ == "__main__":
                                     i.actualize(want2be)
                                     break
                                 else:
-                                    print '\n',tabs,'invalid choice\n'
+                                    print '\n' + tabs + 'invalid choice\n'
                             break    
                         else:
-                            print '\n',tabs,'invalid choice\n'
+                            print '\n' + tabs + 'invalid choice'
                 
                 elif choice == '3':
                     # check despair status
                     if i.getDespair() == True:
-                        print '\n',tabs,'you are in despair'
+                        print '\n' + tabs + 'you are in despair'
                     else:
-                        print '\n',tabs,'you are not in despair'
+                        print '\n' + tabs + 'you are not in despair'
                 
                 elif choice == '4':
                     # shift right
@@ -230,13 +255,28 @@ if __name__ == "__main__":
                     i.decTab()
                     tabs = updateTab(tabs)
 
+                elif choice == '6':
+                    # build-draw
+                    row = None
+                    art = ''
+                    print '\n' + tabs + 'build something, row by row\n' + tabs+ '[q] when finished\n'
+                    while row != 'q':
+                        row = buildDraw()
+                        if row != 'q':
+                            art += row + '\n'
+                    i.appendPortfolio(art)
+                
+                elif choice == '7':
+                    # print portfolio
+                    i.printPortfolio()
+
                 elif choice == 'q':
                     if i.checkImmortality() == True:
-                        print '\n',tabs,'the self is eternal; you can\'t quit now'
+                        print '\n' + tabs + 'the self is eternal; you can\'t quit now'
                     else:
                         quit = True
                 else:
-                    print '\n',tabs,'invalid choice'
+                    print '\n' + tabs + 'invalid choice'
         
         elif beAnsw == 'quit':
             quit = True 
