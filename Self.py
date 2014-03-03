@@ -200,7 +200,7 @@ if __name__ == "__main__":
                 # the print options loop
                 print '\n' + tabs+ 'OPTIONS:'
                 printTabbedOptions(tabs, ['1. i am...', '2. become [x]', '3. check despair status', '4. shift right', '5. shift left',\
-                 '6. build-draw', '7. print portfolio', '[q] to quit'])
+                 '6. build-draw', '7. print portfolio', '8. is kt awesome?', '[q] to quit'])
                 choice = getInput(tabs,'choose\n', tabs).strip('.')
         
                 if choice == '1':
@@ -269,6 +269,11 @@ if __name__ == "__main__":
                 elif choice == '7':
                     # print portfolio
                     i.printPortfolio()
+
+                elif choice == '8':
+                    # is kt awesome?
+                    print
+                    print tabs + 'yes.'
 
                 elif choice == 'q':
                     if i.checkImmortality() == True:
