@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2 
 
 class Self (object):
     # consider existential concepts of the self. has this been done before?
@@ -12,6 +12,16 @@ class Self (object):
         self.hemi = None
         self.despair = False
         self.immortal = False
+        self.tab = 0
+    
+    def incTab(self):
+        self.tab += 1
+    
+    def decTab(self):
+        self.tab -= 1
+
+    def getTab(self):
+        return int(str(self.tab))
 
     def checkImmortality(self):
         if self.immortal == True:
@@ -47,10 +57,11 @@ class Self (object):
         self.was.append(str(self.am))
         self.am = want2be
         self.want2be = None
-        print "\n*****************"
-        print "    ~actualized~   "
-        print "*****************"
-
+        print 
+        print "\t"*self.tab + "*****************"
+        print "\t"*self.tab + "   ~actualized~  "
+        print "\t"*self.tab + "*****************"
+ 
     def plantDesire(self, want2be):
         self.want2be = want2be
         if self.am == self.zen:
@@ -68,7 +79,7 @@ class Self (object):
         self.was = None
         self.am = self.zen
         self.want2be = None    
-        print '\n\n                           zen\n'
+        print '\n\n' + '\t'*self.tab + '                           zen\n'
     
     def goKierk(self):
         if self.was is None:
@@ -80,7 +91,7 @@ class Self (object):
         self.immortal = True
         # implies despair
         self.despair = True
-        print '\n\n\t you became S0ren Kierkegaard\n'
+        print '\n\n\t' + '\t'*self.tab + ' you became S0ren Kierkegaard\n'
          
     def getWas(self):
         return str(self.was)
@@ -92,13 +103,11 @@ class Self (object):
         return str(self.want2be)
 
     def printMe(self):
-        ret = "\n\t%-9s%s" % ("was: ", self.getWas())
-        ret += "\n\t%-9s%s" % ("am: ", self.getAm())
-        ret += "\n\t%-9s%s" % ("want2be: ", self.getWant2Be())
+        ret = '\n\t' + '\t'*self.tab + '%-9s%s' % ('was: ', self.getWas())
+        ret += '\n\t' + '\t'*self.tab + '%-9s%s' % ('am: ', self.getAm())
+        ret += '\n\t' +  '\t'*self.tab + '%-9s%s' % ('want2be: ', self.getWant2Be())
         print ret
-    
-    # TODO synopsis()
-    # try/except ValueError
+
 
 class Trait (object):
 
@@ -114,28 +123,31 @@ class Trait (object):
 # ===========================================================
 # other functions:
 
-def printOptions():
-    print '\nOPTIONS:'
-    print '\t1. i am...'
-    print '\t2. become [x]'
-    print '\t3. check despair status'
-    print '\t[q] to quit'
+def printTabbedOptions(tabs, optionsList):
+    for option in optionsList:
+        print '\t' + tabs + option
 
-def getInput(prompt):
-    o = raw_input(prompt)
+def getInput(tab1, prompt, tab2):  
+    # must give 3 parameters
+    fullPrompt = tab1 + prompt + tab2
+    o = raw_input(fullPrompt)
     return o
 
 def setEastWest():
     EastWest = False
     while EastWest == False:
-        EastWest = getInput('\n\t...of the [east], or of the [west]?\n\t').lower()
+        EastWest = getInput('','\n\t...of the [east], or of the [west]?\n\t','').lower()
         if EastWest == 'east':
             i.isEast() 
         elif EastWest == 'west':
             i.isWest()
         else:                
-            print 'invalid choice'
+            print '\n\tinvalid choice'
             EastWest = False
+
+def updateTab(t):
+    t = '\t'*i.getTab()
+    return t
 
 ###################################################
 #             MAIN                                #
@@ -145,7 +157,7 @@ if __name__ == "__main__":
     print '\nnew game\n\n'    
     quit = False
     while quit != True:
-        beAnsw = getInput('do you want to be? [y/n/quit]\n')
+        beAnsw = getInput('','do you want to be? [y/n/quit]\n','')
 
         if beAnsw == "n":
             # never existed
@@ -154,6 +166,7 @@ if __name__ == "__main__":
         elif beAnsw == "y":
             # choosing to exist
             i = Self()
+            tabs = '\t'*i.getTab()
             print '\nyou exist, as an object'
             
             setEastWest()
@@ -161,16 +174,20 @@ if __name__ == "__main__":
             quit = False
             while quit != True:
                 # the print options loop
-                printOptions()
-                choice = getInput('choose\n')
+                print '\n' + tabs+ 'OPTIONS:'
+                printTabbedOptions(tabs, ['1. i am...', '2. become [x]', '3. check despair status', '4. shift right', '5. shift left', '[q] to quit'])
+                choice = getInput(tabs,'choose\n', tabs)
         
                 if choice == '1':
+                    # i am...
                     i.printMe()
                 
                 elif choice == '2': 
-                    
+                    # become [x]
                     while True:
-                        want = getInput('what do you want to become?\n\t1. what i am\n\t2. something else...\n')
+                        print '\n' + tabs + 'what do you want to become'
+                        printTabbedOptions(tabs, ['1. what i am', '2. something else...'])
+                        want = getInput(tabs,'choose\n', tabs)
                         if want == '1':
                             if i.getHemi() == 'east':
                                 i.goZen()
@@ -178,11 +195,12 @@ if __name__ == "__main__":
                                 i.goKierk()
                             break
                         elif want == '2':
-                            want2be = getInput('choose anything\n')
-                            print '\ninteresting choice'
+                            want2be = getInput(tabs,'choose anything\n',tabs)
+                            print '\n' + tabs + 'interesting choice\n'
                              
                             while True:
-                                response = getInput('how bad do you want it?\n\t1. bad\n\t2. real bad\n\t3. i don\'t\n')
+                                print  tabs + 'how bad do you want it?\n\t' + tabs + '1. bad\n\t' + tabs + '2. real bad\n\t' + tabs + '3. i don\'t'
+                                response = getInput(tabs,'choose\n', tabs)
                                 if response == '1' or response == '2':
                                     i.plantDesire(want2be)
                                     break
@@ -190,24 +208,37 @@ if __name__ == "__main__":
                                     i.actualize(want2be)
                                     break
                                 else:
-                                    print '\ninvalid choice\n'
+                                    print '\n',tabs,'invalid choice\n'
                             break    
                         else:
-                            print '\ninvalid choice\n'
+                            print '\n',tabs,'invalid choice\n'
                 
                 elif choice == '3':
+                    # check despair status
                     if i.getDespair() == True:
-                        print '\nyou are in despair'
+                        print '\n',tabs,'you are in despair'
                     else:
-                        print '\nyou are not in despair'
+                        print '\n',tabs,'you are not in despair'
+                
+                elif choice == '4':
+                    # shift right
+                    i.incTab()
+                    tabs = updateTab(tabs)
+
+                elif choice == '5':
+                    # shift left
+                    i.decTab()
+                    tabs = updateTab(tabs)
 
                 elif choice == 'q':
                     if i.checkImmortality() == True:
-                        print '\nyou\'ve already acknowledged immortality; you can\'t quit now'
+                        print '\n',tabs,'the self is eternal; you can\'t quit now'
                     else:
                         quit = True
                 else:
-                    print '\ninvalid choice'
+                    print '\n',tabs,'invalid choice'
         
         elif beAnsw == 'quit':
             quit = True 
+
+#TODO : synopsis, suicide, (tabbing)
